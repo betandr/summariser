@@ -1,10 +1,66 @@
 # Media Services - Summariser
 
+## Preface
+
+`Summariser` summarises users viewing habits to help the BBC to intelligently
+recommend content. It accepts a _mapping_ between programmes and categories
+supplied as a JSON file of the format:
+
+```
+{
+    "childrens": [
+        "Peter Rabbit",
+        "Blue Peter",
+        "Danger Mouse"
+    ],
+    "current_affairs": [
+        "News",
+        "Question Time",
+        "The One Show"
+    ],
+    "drama": [
+        "Eastenders",
+        "Holby City",
+        "Killing Eve"
+    ],
+    "science_fiction": [
+        "Dr. Who",
+        "Douglas Hill"
+    ]
+}
+```
+
+These mappings are matched against a list of shows that audience members have
+watched—and the amount of time they spent watching them. These viewings are
+supplied as a file of comma-separated values of the format:
+
+```
+<date in epoch seconds>, <user_identifier>, <programme name>, <watch time in seconds>, <device_type>
+```
+
+...such as:
+
+```
+1539268536,88888888,Holby City,3600,ip_tv
+1539268599,99999999,Dr. Who,180,mobile
+```
+
+`Summariser` will then generate a JSON output file containing a summary of the
+viewing data organised by identifier, month of the year, and category.
+
+A message will be printed to `stderr` any time a customer has spent more than
+15 hours watching BBC content in a rolling 7 day period. e.g.
+
+```
+WARNING: 88888888 consumed 15 hours of bbc content between 01/01/19 and 07/01/19
+```
+
 ## Pre-requisites
 
 To build this project you will need to:
 
 ### Install Bazel
+
 [install Bazel](https://docs.bazel.build/versions/master/install.html). Bazel is
 an open-source build and test tool similar to Make, Maven, and Gradle.
 
@@ -40,30 +96,43 @@ be run automatically when starting a new interactive shell.
 bazel test //:AllTests
 ```
 
-## Run the project
+This executes all tests within the `uk.co.bbc.mediaservices.summariser.AllTests`
+test suite.
 
-Firstly build the project:
+## Build the project
 
 ```
 bazel build //:ProjectRunner
 ```
 
-Then run the project:
+## Run the project
 
 ```
-bazel-bin/ProjectRunner
+bazel-bin/ProjectRunner \
+    --host_jvm_args="-Xmx256m" \
+    --category-mappings /path/to/mappings.json \
+    --viewings /path/to/viewings.csv \
+    --output /path/to/output.json
 ```
+
+...where
+
+`--category-mappings` is the path to a category_mappings.json file.
+
+`--viewings` is the path to a viewings.csv.
+
+`--output` is the path to an output json file.
 
 ## Build the action graph
 
-The action graph represents the build artifacts, the relationships between them,
+The _action graph_ represents the build artifacts, the relationships between them,
 and the build actions that Bazel will perform. By using this graph Bazel can
 track changes to files and actions, such as build or test commands, and know
-what build work has previously been done. The action graph can be used to trace
-dependencies in your code.
+what build work has previously been done. This allows Bazel to complete fast and
+incremental builds.
 
-To generate a graph, which can be pasted into
-[Webgraphviz](http://www.webgraphviz.com/):
+The action graph can be used to trace dependencies in your code. To generate a
+graph; which can be pasted into [Webgraphviz](http://www.webgraphviz.com/):
 
 ```
 bazel query  --nohost_deps --noimplicit_deps "deps(//:ProjectRunner)" --output graph
