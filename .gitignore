@@ -3,3 +3,10 @@
 
 # Ignore Gradle build output directory
 build
+
+# Ignore Bazel generate directories
+bazel-bin
+bazel-genfiles
+bazel-out
+bazel-summariser
+bazel-testlogs
