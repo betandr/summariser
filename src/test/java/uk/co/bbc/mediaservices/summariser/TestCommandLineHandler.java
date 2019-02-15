@@ -10,7 +10,17 @@ import java.nio.charset.StandardCharsets;
 
 import uk.co.bbc.mediaservices.summariser.MockSummariser;
 
+/**
+ * TestCommandLineHandler tests the functionality of the CommandLineHandler
+ * class.
+ */
 public class TestCommandLineHandler {
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void testSummariserNotInjectedThrowsException() throws Exception {
+        CommandLineHandler handler = new CommandLineHandler();
+        handler.handle(new String[0]);
+    }
 
     @Test
     public void testHandleValidArgs() throws Exception {
@@ -38,5 +48,4 @@ public class TestCommandLineHandler {
         assertEquals(job.getViewingsFilename(), viewingsFilename);
         assertEquals(job.getOutputFilename(), outputFilename);
     }
-
 }

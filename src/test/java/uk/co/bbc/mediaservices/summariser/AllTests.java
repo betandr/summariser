@@ -7,6 +7,6 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
     // Test1.class,
-    TestGreeter.class
+    TestCommandLineHandler.class
 })
 public class AllTests {}

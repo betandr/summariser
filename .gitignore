@@ -10,3 +10,4 @@ bazel-genfiles
 bazel-out
 bazel-summariser
 bazel-testlogs
+data/
