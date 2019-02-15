@@ -93,11 +93,11 @@ be run automatically when starting a new interactive shell.
 ## Run all tests
 
 ```
-bazel test //:AllTests
+bazel test //:AllTests --test_output=all
 ```
 
 This executes all tests within the `uk.co.bbc.mediaservices.summariser.AllTests`
-test suite.
+test suite and outputs the results. Run without `--test_output=all` for less detail.
 
 ## Build the project
 
@@ -108,11 +108,10 @@ bazel build //:ProjectRunner
 ## Run the project
 
 ```
-bazel-bin/ProjectRunner \
-    --host_jvm_args="-Xmx256m" \
-    --category-mappings /path/to/mappings.json \
-    --viewings /path/to/viewings.csv \
-    --output /path/to/output.json
+bazel --host_jvm_args="-Xmx256m" run //:ProjectRunner -- \
+    --category-mappings=/Users/anderb08/workspace/summariser/data/category_mappings.json \
+    --viewings=/Users/anderb08/workspace/summariser/data/viewings.csv \
+    --output=/Users/anderb08/workspace/summariser/data/output.json
 ```
 
 ...where
