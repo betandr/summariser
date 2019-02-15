@@ -6,6 +6,10 @@ import java.io.File;
  * CommandLineHandler translates command line arguments to a Job which can be
  * passed to the Summariser to execute. The Summariser is injected as an
  * implementation of the Strategy GoF pattern.
+ *
+ * This could be handled with Commons CLI
+ * (http://commons.apache.org/proper/commons-cli/) if a more robust
+ * implementation was required.
  */
 public class CommandLineHandler {
 
@@ -15,6 +19,11 @@ public class CommandLineHandler {
         this.summariser = summariser;
     }
 
+    /**
+     * handle accepts a String array and extracts the values of
+     * `category-mappings`, `viewings`, and `output` filenames.
+     * @param args A String array containing command line arguments.
+     */
     public void handle(String args[]) throws UnsupportedOperationException {
         if (summariser == null) {
             throw new UnsupportedOperationException("no summariser found to perform work");
