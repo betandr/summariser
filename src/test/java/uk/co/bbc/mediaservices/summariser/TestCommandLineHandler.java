@@ -3,12 +3,7 @@ package uk.co.bbc.mediaservices.summariser;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-
-import java.io.ByteArrayOutputStream;
-import java.io.PrintStream;
-import java.nio.charset.StandardCharsets;
-
-import uk.co.bbc.mediaservices.summariser.MockSummariser;
+import java.util.Scanner;
 
 /**
  * TestCommandLineHandler tests the functionality of the CommandLineHandler
@@ -23,7 +18,7 @@ public class TestCommandLineHandler {
     }
 
     @Test
-    public void testHandleValidArgs() throws Exception {
+    public void testExtractValidArgs() throws Exception {
         CommandLineHandler handler = new CommandLineHandler();
         MockSummariser summariser = new MockSummariser();
         handler.setSummariser(summariser);
@@ -38,14 +33,30 @@ public class TestCommandLineHandler {
             "--output=" + outputFilename
         };
 
-        // Handle the command line args
+        SummariserFiles files = handler.extractFilenames(args);
+        assertEquals(files.getCategoryMappingsFilename(), categoryMappingsFilename);
+        assertEquals(files.getViewingsFilename(), viewingsFilename);
+        assertEquals(files.getOutputFilename(), outputFilename);
+    }
+
+
+    @Test
+    public void testHandlerCallsSummarise() {
+        CommandLineHandler handler = new CommandLineHandler();
+        MockSummariser summariser = new MockSummariser();
+        handler.setSummariser(summariser);
+
+        String args[] = {
+            "--category-mappings=/foo/category_mappings.json",
+            "--viewings=/bar/viewings.csv",
+            "--output=/baz/output.json"
+        };
+
         handler.handle(args);
+        assertEquals(summariser.getCount(), 1);
 
-        // The 'job' contains data that the Summariser needs to run
-        Job job = summariser.getJob();
-
-        assertEquals(job.getCategoryMappingsFilename(), categoryMappingsFilename);
-        assertEquals(job.getViewingsFilename(), viewingsFilename);
-        assertEquals(job.getOutputFilename(), outputFilename);
+        // run again to ensure side-effect
+        handler.handle(args);
+        assertEquals(summariser.getCount(), 2);
     }
 }

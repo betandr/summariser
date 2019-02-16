@@ -1,6 +1,9 @@
 package uk.co.bbc.mediaservices.summariser;
 
-import java.io.File;
+import java.util.Scanner;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.FileNotFoundException;
 
 /**
  * CommandLineHandler translates command line arguments to a Job which can be
@@ -19,16 +22,7 @@ public class CommandLineHandler {
         this.summariser = summariser;
     }
 
-    /**
-     * handle accepts a String array and extracts the values of
-     * `category-mappings`, `viewings`, and `output` filenames.
-     * @param args A String array containing command line arguments.
-     */
-    public void handle(String args[]) throws UnsupportedOperationException {
-        if (summariser == null) {
-            throw new UnsupportedOperationException("no summariser found to perform work");
-        }
-
+    protected SummariserFiles extractFilenames(String args[]) {
         String mappingsFilename = null;
         String viewingsFilename = null;
         String outputFilename = null;
@@ -48,7 +42,24 @@ public class CommandLineHandler {
             }
         }
 
-        Job job = new Job(mappingsFilename, viewingsFilename, outputFilename);
-        summariser.summarise(job);
+        return new SummariserFiles(
+            mappingsFilename,
+            viewingsFilename,
+            outputFilename
+        );
+    }
+
+    /**
+     * handle accepts a String array and extracts the values of
+     * `category-mappings`, `viewings`, and `output` filenames.
+     * @param args A String array containing command line arguments.
+     */
+    public void handle(String args[]) throws UnsupportedOperationException {
+        if (summariser == null) {
+            throw new UnsupportedOperationException("no summariser found to perform work");
+        }
+
+        SummariserFiles files = extractFilenames(args);
+        summariser.summarise(files);
     }
 }

@@ -11,3 +11,4 @@ bazel-out
 bazel-summariser
 bazel-testlogs
 data/
+.DS_Store

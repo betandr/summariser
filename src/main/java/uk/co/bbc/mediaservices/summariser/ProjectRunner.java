@@ -15,7 +15,7 @@ public class ProjectRunner {
      */
     public static void main(String args[]) {
         CommandLineHandler handler = new CommandLineHandler();
-        handler.setSummariser(new SummariserImpl()); // inject Summariser
+        handler.setSummariser(new SummariserImpl());
         try {
             handler.handle(args);
         } catch (UnsupportedOperationException uoe) {

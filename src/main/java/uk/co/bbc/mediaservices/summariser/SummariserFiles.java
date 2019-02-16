@@ -1,16 +1,16 @@
 package uk.co.bbc.mediaservices.summariser;
 
 /**
- * Job encapsulates the information that the Summariser needs to complete a
+ * SummariserFiles encapsulates the information that the Summariser needs to complete a
  * summarise task.
  */
-public class Job {
+public class SummariserFiles {
 
     private String categoryMappingsFilename;
     private String viewingsFilename;
     private String outputFilename;
 
-    public Job(
+    public SummariserFiles(
         String categoryMappingsFilename,
         String viewingsFilename,
         String outputFilename) {

@@ -1,8 +1,8 @@
 # Media Services - Summariser
 
-## Preface
+## 1. Preface
 
-`Summariser` summarises users viewing habits to help the BBC to intelligently
+_**Summariser**_ summarises users viewing habits to help the BBC to intelligently
 recommend content. It accepts a _mapping_ between programmes and categories
 supplied as a JSON file of the format:
 
@@ -55,11 +55,11 @@ A message will be printed to `stderr` any time a customer has spent more than
 WARNING: 88888888 consumed 15 hours of bbc content between 01/01/19 and 07/01/19
 ```
 
-## Pre-requisites
+## 2. Pre-requisites
 
 To build this project you will need to:
 
-### Install Bazel
+### 2a. Install Bazel
 
 [install Bazel](https://docs.bazel.build/versions/master/install.html). Bazel is
 an open-source build and test tool similar to Make, Maven, and Gradle.
@@ -70,7 +70,7 @@ When running a build or a test, Bazel does the following:
 - _Analyzes_ the inputs and their dependencies, applies the specified build rules, and produces an action graph.
 - _Executes_ the build actions on the inputs until the final build outputs are produced.
 
-### Set `JAVA_HOME`
+### 2b. Set `JAVA_HOME`
 
 The following command is used to set your `JAVA_HOME` automatically _(assuming
 you don't already have this set)_; you will need the command line tool
@@ -90,7 +90,7 @@ export JAVA_HOME="$(dirname $(dirname $(realpath $(which javac))))"
 This `export` command can be added to your `.bash_profile` (or `.zshrc` etc) to
 be run automatically when starting a new interactive shell.
 
-## Run all tests
+## 3. Run all tests
 
 ```
 bazel test //:AllTests --test_output=all
@@ -99,13 +99,18 @@ bazel test //:AllTests --test_output=all
 This executes all tests within the `uk.co.bbc.mediaservices.summariser.AllTests`
 test suite and outputs the results. Run without `--test_output=all` for less detail.
 
-## Build the project
+## 4. Generate test coverage report
 
 ```
-bazel build //:ProjectRunner
+bazel coverage -s \
+  --instrument_test_targets \
+  --experimental_cc_coverage \
+  --combined_report=lcov \
+  --coverage_report_generator=@bazel_tools//tools/test/CoverageOutputGenerator/java/com/google/devtools/coverageoutputgenerator:Main \
+  //...
 ```
 
-## Run the project
+## 5. Run the project
 
 ```
 bazel --host_jvm_args="-Xmx256m" run //:ProjectRunner -- \
@@ -122,7 +127,22 @@ bazel --host_jvm_args="-Xmx256m" run //:ProjectRunner -- \
 
 `--output` is the path to an output json file.
 
-## Build the action graph
+## 6. Build a distributable binary
+
+```
+bazel build //:ProjectRunner
+```
+
+## 7. Run the distributable binary
+
+```
+bazel-bin/ProjectRunner \
+    --category-mappings=/Users/anderb08/workspace/summariser/data/category_mappings.json \
+    --viewings=/Users/anderb08/workspace/summariser/data/viewings.csv \
+    --output=/Users/anderb08/workspace/summariser/data/output.json
+```
+
+## 8. Build the action graph
 
 The _action graph_ represents the build artifacts, the relationships between them,
 and the build actions that Bazel will perform. By using this graph Bazel can
@@ -137,7 +157,7 @@ graph; which can be pasted into [Webgraphviz](http://www.webgraphviz.com/):
 bazel query  --nohost_deps --noimplicit_deps "deps(//:ProjectRunner)" --output graph
 ```
 
-## Clean the project
+## 9. Clean the project
 
 To completely clean the project run:
 

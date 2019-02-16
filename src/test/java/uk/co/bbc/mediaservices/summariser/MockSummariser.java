@@ -1,21 +1,24 @@
 package uk.co.bbc.mediaservices.summariser;
 
-import uk.co.bbc.mediaservices.summariser.Summariser;
+import java.util.Scanner;
 
 /**
- * MockSummariser is a mock object which is used to inject into the
- * CommandLineHandler and, after execution, retrieve the Job that has been
- * created from the command line arguments.
+ * Summariser represents the public interface for all implementations.
  */
 public class MockSummariser implements Summariser {
-
-    private Job job;
-
-    public Job getJob() {
-        return job;
+    private int count;
+    /**
+     * Run the summarise task with the supplied SummariserFiles.
+     * @params files Containing the files required to run a summarise task
+     */
+    public void summarise(SummariserFiles files) {
+        this.count++;
     }
 
-    public void summarise(Job job) {
-        this.job = job;
+    // Count is incremented each time `summarise(SummariserFiles files)` is
+    // called and used as a probe that CommandLineHandler is correctly calling
+    // summarise when handle is executed.
+    protected int getCount() {
+        return this.count;
     }
 }
