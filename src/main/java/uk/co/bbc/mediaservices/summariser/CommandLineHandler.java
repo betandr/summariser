@@ -59,7 +59,12 @@ public class CommandLineHandler {
             throw new UnsupportedOperationException("no summariser found to perform work");
         }
 
-        SummariserFiles files = extractFilenames(args);
-        summariser.summarise(files);
+        try {
+            SummariserFiles files = extractFilenames(args);
+            summariser.loadMappings(files);
+            summariser.summarise(files);
+        } catch (FileNotFoundException fnfe) {
+            System.err.println(fnfe.getMessage());
+        }
     }
 }

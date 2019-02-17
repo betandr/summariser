@@ -7,6 +7,9 @@ import java.util.Scanner;
  */
 public class MockSummariser implements Summariser {
     private int count;
+
+    public void loadMappings(SummariserFiles files) {}
+
     /**
      * Run the summarise task with the supplied SummariserFiles.
      * @params files Containing the files required to run a summarise task
