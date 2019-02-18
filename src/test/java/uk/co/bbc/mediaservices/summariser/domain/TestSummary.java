@@ -14,6 +14,18 @@ import static org.junit.Assert.assertEquals;
 public class TestSummary {
 
     @Test
+    public void testSummaryReturnsCorrectWeekStart() {
+        LocalDateTime dateTime = LocalDateTime.ofEpochSecond(
+            1546300800,
+            0,
+            ZoneOffset.UTC
+        );
+
+        Summary summary = new Summary(-1, dateTime, null, -1);
+        assertEquals("January", summary.getMonth());
+    }
+
+    @Test
     public void testSummaryReturnsCorrectWeekNumber() {
         LocalDateTime startOfYearDateTime = LocalDateTime.ofEpochSecond(
             1546300800,

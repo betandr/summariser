@@ -4,11 +4,11 @@ import java.io.FileInputStream;
 import java.io.Reader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
+import java.io.FileOutputStream;
 import java.util.Scanner;
 import java.util.Map;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.time.LocalDateTime;
@@ -18,6 +18,8 @@ import javax.json.JsonReader;
 import javax.json.JsonString;
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonArrayBuilder;
 
 import uk.co.bbc.mediaservices.summariser.domain.Duration;
 import uk.co.bbc.mediaservices.summariser.domain.Viewing;
@@ -68,7 +70,7 @@ public class SummariserImpl implements Summariser {
     /**
      * Safety method to obtain the durations map
      */
-    protected Map<String, Duration> summaryDurations() {
+    protected Map<String, Duration> durations() {
         if (durations == null) {
             durations = new HashMap<String, Duration>();
         }
@@ -107,7 +109,7 @@ public class SummariserImpl implements Summariser {
         Duration duration = durations.get(key);
 
         if (duration == null) {
-            durations.put(key, new Duration());
+            durations.put(key, new Duration(summary.getMonth()));
             duration = durations.get(key);
         }
 
@@ -135,7 +137,7 @@ public class SummariserImpl implements Summariser {
     protected void process(String line) {
         try {
             Viewing v = stringToViewing(line);
-            addSummary(summaryDurations(), viewingToSummary(v));
+            addSummary(durations(), viewingToSummary(v));
         } catch (Exception e) {
             System.err.println(
                 "ERROR: could not process " +
@@ -232,6 +234,53 @@ public class SummariserImpl implements Summariser {
     }
 
     /**
+     * Renders the durations as a JSON string, ready to write to a file or stdout
+     * @param durations The map of <"user_week",Duration> durations.
+     */
+    protected String renderJsonString(Map<String,Duration> durations) {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        JsonArrayBuilder results = Json.createArrayBuilder();
+
+        Iterator it = durations.keySet().iterator();
+        while (it.hasNext()) {
+            String key = (String) it.next();
+            String id = key.substring(0, key.indexOf("_"));
+            String weeknumber = key.substring(key.indexOf("_") + 1, key.length());
+
+            Duration duration = durations().get(key);
+
+            JsonObjectBuilder summary = Json.createObjectBuilder();
+            JsonArrayBuilder summaryItems = Json.createArrayBuilder();
+            JsonArrayBuilder categories = Json.createArrayBuilder();
+
+            Iterator cdit = duration.getCategoryDurations().keySet().iterator();
+
+            JsonObjectBuilder category = Json.createObjectBuilder();
+
+            while (cdit.hasNext()) {
+                String k = (String) cdit.next();
+                int v = duration.getCategoryDurations().get(k).get();
+                category.add(k, v);
+            }
+
+            categories.add(category);
+
+            JsonObjectBuilder summaryItem = Json.createObjectBuilder();
+            summaryItem.add("categories", categories);
+            summaryItem.add("week", weeknumber);
+            summaryItems.add(summaryItem);
+
+            summary.add("identifier", Integer.parseInt(id));
+            summary.add("summary", summaryItems);
+            results.add(summary);
+        }
+
+        builder.add("results", results);
+
+        return builder.build().toString();
+    }
+
+    /**
      * The entry point to the Summariser class, triggering the summerise work.
      * @param files The object containing the files that summarise will run with.
      */
@@ -252,6 +301,12 @@ public class SummariserImpl implements Summariser {
                     System.err.println(ioe.getMessage());
                 }
             }
+        }
+        String s = renderJsonString(durations());
+        try (PrintStream out = new PrintStream(new FileOutputStream(files.getOutputFilename()))) {
+            out.print(s);
+        } catch (FileNotFoundException fnfe) {
+            System.err.println(fnfe.getMessage());
         }
     }
 }

@@ -45,7 +45,7 @@ public class TestSummariserImpl {
     @Test
     public void testDurationsOverFifteenHoursTriggersStdoutMessage() {
         SummariserImpl summariser = new SummariserImpl();
-        Map<String, Duration> durations = summariser.summaryDurations();
+        Map<String, Duration> durations = summariser.durations();
         int halfDuration = (SummariserImpl.FIFTEEN_HOURS / 2) + 1;
 
         Viewing viewing = new Viewing(1540641600, 98765432, "News", halfDuration, "mobile");
@@ -65,7 +65,7 @@ public class TestSummariserImpl {
     @Test
     public void testSummaryDurationsReturnsAMap() {
         SummariserImpl summariser = new SummariserImpl();
-        Object durations = summariser.summaryDurations();
+        Object durations = summariser.durations();
         assertTrue(durations != null);
         assertTrue(durations instanceof Map);
     }

@@ -9,12 +9,22 @@ import java.util.Iterator;
  */
 public class Duration {
 
-    Map<String,MutableInt> durations;
+    private Map<String,MutableInt> durations;
+
+    private String month;
+
+    public Duration(String month) {
+        this.month = month;
+    }
+
+    public String getMonth() {
+        return this.month;
+    }
 
     /**
      * Safety method to return `durations` or create it if it is null.
      */
-    protected Map<String,MutableInt> getCategoryDurations() {
+    public Map<String,MutableInt> getCategoryDurations() {
         if (durations == null) {
             durations = new HashMap<String,MutableInt>();
         }

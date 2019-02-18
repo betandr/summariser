@@ -14,26 +14,32 @@ import static org.junit.Assert.assertEquals;
 public class TestDuration {
 
     @Test
+    public void testNewDurationWithMonth() {
+        Duration duration = new Duration("MONTH");
+        assertEquals("MONTH", duration.getMonth());
+    }
+
+    @Test
     public void testNewCategoryReturnsZero() {
-        Duration duration = new Duration();
+        Duration duration = new Duration("MONTH");
         assertEquals(0, duration.getCategoryDuration("foo"));
     }
 
     @Test
     public void testTotalDurationForNewDurationIsZero() {
-        Duration duration = new Duration();
+        Duration duration = new Duration("MONTH");
         assertEquals(0, duration.getTotalDuration());
     }
 
     @Test
     public void testAddingDurationSetsCorrectTotalDuration() {
-        Duration duration = new Duration();
+        Duration duration = new Duration("MONTH");
         assertEquals(0, duration.getTotalDuration());
     }
 
     @Test
     public void testOverallIncreases() {
-        Duration duration = new Duration();
+        Duration duration = new Duration("MONTH");
         assertEquals(0, duration.getTotalDuration());
         duration.addCategoryDuration("foo", 2);
         duration.addCategoryDuration("bar", 2);
@@ -42,7 +48,7 @@ public class TestDuration {
 
     @Test
     public void testSingleCategory() {
-        Duration duration = new Duration();
+        Duration duration = new Duration("MONTH");
         duration.addCategoryDuration("foo", 7);
         assertEquals(7, duration.getCategoryDuration("foo"));
         duration.addCategoryDuration("foo", 3);
@@ -51,7 +57,7 @@ public class TestDuration {
 
     @Test
     public void testEnsureSingleCategoriesDoNotAffectEachOther() {
-        Duration duration = new Duration();
+        Duration duration = new Duration("MONTH");
         duration.addCategoryDuration("foo", 1);
         duration.addCategoryDuration("bar", 2);
         assertEquals(1, duration.getCategoryDuration("foo"));
