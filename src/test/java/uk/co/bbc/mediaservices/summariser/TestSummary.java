@@ -23,11 +23,13 @@ public class TestSummary {
         );
         int userIdentifier = 1234567890;
         String category = "CATEGORY";
-        Summary smry = new Summary(userIdentifier, dateTime, category);
+        int watchTimeInSeconds = 1234;
+        Summary smry = new Summary(userIdentifier, dateTime, category, watchTimeInSeconds);
 
         assertEquals(smry.getUserIdentifier(), userIdentifier);
         assertEquals(smry.getMonth(), "January");
         assertEquals(smry.getCategory(), category);
+        assertEquals(smry.getWatchTimeInSeconds(), watchTimeInSeconds);
     }
 
     @Test
@@ -39,11 +41,13 @@ public class TestSummary {
         );
         int userIdentifier = 1234567890;
         String category = "CATEGORY";
-        Summary smry = new Summary(userIdentifier, dateTime, category);
+        int watchTimeInSeconds = 1234;
+        Summary smry = new Summary(userIdentifier, dateTime, category, watchTimeInSeconds);
 
-        String s = "Summary: \nUser Identifier: 1234567890" +
+        String s = "[Summary\nUser Identifier: 1234567890" +
             "\nMonth of Year: January" +
-            "\nCategory: CATEGORY";
+            "\nCategory: CATEGORY" +
+            "\nWatch Time (secs): 1234]";
 
         assertEquals(smry.toString(), s);
     }

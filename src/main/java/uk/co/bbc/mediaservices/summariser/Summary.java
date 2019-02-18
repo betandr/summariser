@@ -15,11 +15,17 @@ public class Summary {
     private int userIdentifier;
     private LocalDateTime dateTime;
     private String category;
+    private int watchTimeInSeconds;
 
-    public Summary(int userIdentifier, LocalDateTime dateTime, String category) {
-        this.userIdentifier = userIdentifier;
-        this.dateTime = dateTime;
-        this.category = category;
+    public Summary(
+        int userIdentifier,
+        LocalDateTime dateTime,
+        String category,
+        int watchTimeInSeconds) {
+            this.userIdentifier = userIdentifier;
+            this.dateTime = dateTime;
+            this.category = category;
+            this.watchTimeInSeconds = watchTimeInSeconds;
     }
 
     public int getUserIdentifier() {
@@ -42,9 +48,14 @@ public class Summary {
         return this.category;
     }
 
+    public int getWatchTimeInSeconds() {
+        return this.watchTimeInSeconds;
+    }
+
     public String toString() {
-        return "Summary: \nUser Identifier: " + this.userIdentifier +
+        return "[Summary\nUser Identifier: " + this.userIdentifier +
             "\nMonth of Year: " + this.getMonth() +
-            "\nCategory: " + this.category;
+            "\nCategory: " + this.category +
+            "\nWatch Time (secs): " + this.watchTimeInSeconds + "]";
     }
 }

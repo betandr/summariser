@@ -55,7 +55,8 @@ public class SummariserImpl implements Summariser {
         return new Summary(
             viewing.getUserIdentifier(),
             dateTime,
-            categoryMapping(viewing.getProgrammeName()));
+            categoryMapping(viewing.getProgrammeName()),
+            viewing.getWatchTimeInSeconds());
     }
 
     /**
