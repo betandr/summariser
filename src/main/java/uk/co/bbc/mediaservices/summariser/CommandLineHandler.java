@@ -5,6 +5,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.FileNotFoundException;
 
+import uk.co.bbc.mediaservices.summariser.domain.SummariserFiles;
+
 /**
  * CommandLineHandler translates command line arguments to a Job which can be
  * passed to the Summariser to execute. The Summariser is injected as an

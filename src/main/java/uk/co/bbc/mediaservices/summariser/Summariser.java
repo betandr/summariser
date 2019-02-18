@@ -3,6 +3,8 @@ package uk.co.bbc.mediaservices.summariser;
 import java.util.Scanner;
 import java.io.FileNotFoundException;
 
+import uk.co.bbc.mediaservices.summariser.domain.SummariserFiles;
+
 /**
  * Summariser represents the public interface for all implementations.
  */

@@ -1,4 +1,4 @@
-package uk.co.bbc.mediaservices.summariser;
+package uk.co.bbc.mediaservices.summariser.domain;
 
 /**
  * SummariserFiles encapsulates the information that the Summariser needs to complete a

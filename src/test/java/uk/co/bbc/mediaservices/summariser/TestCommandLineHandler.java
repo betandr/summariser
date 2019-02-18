@@ -5,6 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import java.util.Scanner;
 
+import uk.co.bbc.mediaservices.summariser.domain.SummariserFiles;
+
 /**
  * TestCommandLineHandler tests the functionality of the CommandLineHandler
  * class.

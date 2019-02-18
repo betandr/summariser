@@ -22,6 +22,7 @@ import javax.json.JsonObject;
 import uk.co.bbc.mediaservices.summariser.domain.Duration;
 import uk.co.bbc.mediaservices.summariser.domain.Viewing;
 import uk.co.bbc.mediaservices.summariser.domain.Summary;
+import uk.co.bbc.mediaservices.summariser.domain.SummariserFiles;
 
 /**
  * SummariserImpl is an implementation of the Summariser interface which runs
@@ -29,10 +30,19 @@ import uk.co.bbc.mediaservices.summariser.domain.Summary;
  */
 public class SummariserImpl implements Summariser {
 
+    /**
+     * Represents the number of seconds in 15 hours.
+     */
     protected static final int FIFTEEN_HOURS = 54000;
 
-    private Map<String,String> mappings;
+    /**
+     * Holds the mappings of programme names to categories
+     */
+    private Map<String,String> categoryMappings;
 
+    /**
+     * Used to suppress repeated warnings
+     */
     private Map<String,Boolean> warnings = new HashMap<String,Boolean>();
 
     /**
@@ -41,13 +51,15 @@ public class SummariserImpl implements Summariser {
     private Map<String,Duration> durations;
 
     /**
-     * Safe lookup of category mappings
+     * Safe lookup of category mappings.
+     * @return String If a mapping exists the category is returned otherwise
+     * "Unknown".
      */
     protected String categoryMapping(String programmeName) {
         String category = "Unknown";
 
-        if (mappings != null && mappings.containsKey(programmeName)) {
-            category = mappings.get(programmeName);
+        if (categoryMappings != null && categoryMappings.containsKey(programmeName)) {
+            category = categoryMappings.get(programmeName);
         }
 
         return category;
@@ -160,7 +172,7 @@ public class SummariserImpl implements Summariser {
      * @param mappings The Map<String,String> key/value mappings.
      */
     protected void setMappings(Map<String,String> mappings) {
-        this.mappings = mappings;
+        this.categoryMappings = mappings;
     }
 
     /**
