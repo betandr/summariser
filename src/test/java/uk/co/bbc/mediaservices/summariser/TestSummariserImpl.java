@@ -6,7 +6,8 @@ import java.util.HashMap;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
-import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 
 // import static org.mockito.Mockito.spy;
 // import static org.mockito.Mockito.times;
@@ -14,6 +15,8 @@ import java.io.ByteArrayInputStream;
 // import static org.mockito.Matchers.any;
 
 import org.junit.Test;
+import org.junit.Before;
+import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -22,33 +25,37 @@ import static org.junit.Assert.assertTrue;
  * TestSummariserImpl tests the functionality of the Summariser class.
  */
 public class TestSummariserImpl {
+    private final ByteArrayOutputStream stdout = new ByteArrayOutputStream();
+    private final PrintStream prevOut = System.out;
+
+    @Before
+    public void setUpStreams() {
+        System.setOut(new PrintStream(stdout));
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(prevOut);
+    }
 
     @Test
-    public void testSummaryDurationsHasSingleKeys() {
+    public void testDurationsOverFifteenHoursTriggersStdoutMessage() {
         SummariserImpl summariser = new SummariserImpl();
-        Map<String,MutableInt> durations = summariser.summaryDurations();
+        Map<String, Duration> durations = summariser.summaryDurations();
+        int halfDuration = (SummariserImpl.FIFTEEN_HOURS / 2) + 1;
 
-        Viewing viewing = new Viewing(1540641600, 98765432, "News", 3600, "mobile");
+        Viewing viewing = new Viewing(1540641600, 98765432, "News", halfDuration, "mobile");
         Summary summary = summariser.viewingToSummary(viewing);
+        summariser.addSummary(durations, summary);
+        Viewing viewing2 = new Viewing(1540641601, 98765432, "News", halfDuration, "mobile");
+        Summary summary2 = summariser.viewingToSummary(viewing2);
+        summariser.addSummary(durations, summary2);
 
-        String key =
-            summary.getUserIdentifier() + "_" +
-            summary.getWeekNumber() + "_" +
-            summary.getCategory();
+        String expectedError =
+            "WARNING: 98765432 consumed 15 hours of bbc " +
+            "content between 22/10/18 and 29/10/18\n";
 
-        MutableInt mi = new MutableInt();
-        mi.add(1);
-
-        durations.put(key, mi);
-        assertTrue(durations.size() == 1);
-
-        String key2 =
-            summary.getUserIdentifier() + "_" +
-            summary.getWeekNumber() + "_" +
-            summary.getCategory();
-
-        durations.put(key2, mi);
-        assertTrue(durations.size() == 1);
+        assertEquals(expectedError, stdout.toString());
     }
 
     @Test

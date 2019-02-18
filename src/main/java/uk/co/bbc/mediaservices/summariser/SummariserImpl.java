@@ -25,14 +25,16 @@ import javax.json.JsonObject;
  */
 public class SummariserImpl implements Summariser {
 
-    private static final int FIFTEEN_HOURS = 54000;
+    protected static final int FIFTEEN_HOURS = 54000;
 
     private Map<String,String> mappings;
+
+    private Map<String,Boolean> warnings = new HashMap<String,Boolean>();
 
     /**
      * Holds the overall durations for user/weeknumber/category
      */
-    private Map<String, MutableInt> durations;
+    private Map<String,Duration> durations;
 
     /**
      * Safe lookup of category mappings
@@ -50,9 +52,9 @@ public class SummariserImpl implements Summariser {
     /**
      * Safety method to obtain the durations map
      */
-    protected Map<String, MutableInt> summaryDurations() {
+    protected Map<String, Duration> summaryDurations() {
         if (durations == null) {
-            durations = new HashMap<String, MutableInt>();
+            durations = new HashMap<String, Duration>();
         }
 
         return durations;
@@ -81,29 +83,33 @@ public class SummariserImpl implements Summariser {
      * Add the duration from the supplied viewing to the previously encountered
      * durations.
      */
-    protected void addSummary(Map<String, MutableInt> durations, Summary summary) {
+    protected void addSummary(Map<String, Duration> durations, Summary summary) {
         String key =
             summary.getUserIdentifier() + "_" +
-            summary.getWeekNumber() + "_" +
-            summary.getCategory();
+            summary.getWeekNumber();
 
-        MutableInt duration = durations.get(key);
+        Duration duration = durations.get(key);
 
         if (duration == null) {
-            durations.put(key, new MutableInt());
-        } else {
-            duration.add(summary.getWatchTimeInSeconds());
+            durations.put(key, new Duration());
+            duration = durations.get(key);
         }
 
-        // TODO refactor to use new Duration object
+        duration.addCategoryDuration(
+            summary.getCategory(),
+            summary.getWatchTimeInSeconds()
+        );
 
-        if (durations.get(key).get() > FIFTEEN_HOURS) {
-            System.out.println(
-                "WARNING: " + summary.getUserIdentifier() +
-                " consumed 15 hours of bbc content between " +
-                summary.getWeekStart() + " and " +
-                summary.getWeekEnd()
-            );
+        if (duration.getTotalDuration() > FIFTEEN_HOURS) {
+            if (!warnings.containsKey(key)) {
+                warnings.put(key, true);
+                System.out.println(
+                    "WARNING: " + summary.getUserIdentifier() +
+                    " consumed 15 hours of bbc content between " +
+                    summary.getWeekStart() + " and " +
+                    summary.getWeekEnd()
+                );
+            }
         }
     }
 
