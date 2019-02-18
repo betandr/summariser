@@ -24,6 +24,34 @@ import static org.junit.Assert.assertTrue;
 public class TestSummariserImpl {
 
     @Test
+    public void testSummaryDurationsHasSingleKeys() {
+        SummariserImpl summariser = new SummariserImpl();
+        Map<String,MutableInt> durations = summariser.summaryDurations();
+
+        Viewing viewing = new Viewing(1540641600, 98765432, "News", 3600, "mobile");
+        Summary summary = summariser.viewingToSummary(viewing);
+
+        String key =
+            summary.getUserIdentifier() + "_" +
+            summary.getWeekNumber() + "_" +
+            summary.getCategory();
+
+        MutableInt mi = new MutableInt();
+        mi.add(1);
+
+        durations.put(key, mi);
+        assertTrue(durations.size() == 1);
+
+        String key2 =
+            summary.getUserIdentifier() + "_" +
+            summary.getWeekNumber() + "_" +
+            summary.getCategory();
+
+        durations.put(key2, mi);
+        assertTrue(durations.size() == 1);
+    }
+
+    @Test
     public void testSummaryDurationsReturnsAMap() {
         SummariserImpl summariser = new SummariserImpl();
         Object durations = summariser.summaryDurations();

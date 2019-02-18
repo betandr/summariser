@@ -2,6 +2,7 @@ package uk.co.bbc.mediaservices.summariser;
 
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;
+import java.time.temporal.TemporalField;
 import java.util.Locale;
 import java.util.Calendar;
 import java.time.LocalDateTime;
@@ -43,6 +44,29 @@ public class Summary {
             Locale.ENGLISH
         );
         return dateTime.format(formatter);
+    }
+
+    public String getWeekStart() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+            "dd/MM/yy",
+            Locale.ENGLISH
+        );
+        TemporalField fieldISO = WeekFields.of(Locale.getDefault()).dayOfWeek();
+        LocalDateTime start = this.dateTime.with(fieldISO, 1);
+
+        return start.format(formatter);
+    }
+
+    public String getWeekEnd() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+            "dd/MM/yy",
+            Locale.ENGLISH
+        );
+
+        TemporalField fieldISO = WeekFields.of(Locale.getDefault()).dayOfWeek();
+        LocalDateTime start = this.dateTime.with(fieldISO, 1);
+
+        return start.plusDays(7).format(formatter);
     }
 
     public int getWeekNumber() {

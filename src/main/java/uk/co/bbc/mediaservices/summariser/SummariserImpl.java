@@ -25,6 +25,8 @@ import javax.json.JsonObject;
  */
 public class SummariserImpl implements Summariser {
 
+    private static final int FIFTEEN_HOURS = 54000;
+
     private Map<String,String> mappings;
 
     /**
@@ -93,7 +95,16 @@ public class SummariserImpl implements Summariser {
             duration.add(summary.getWatchTimeInSeconds());
         }
 
-        System.out.println(key + " - " + summary.getWatchTimeInSeconds());
+        // TODO refactor to not use category key and Duration instead of MutableInt
+
+        if (durations.get(key).get() > FIFTEEN_HOURS) {
+            System.out.println(
+                "WARNING: " + summary.getUserIdentifier() +
+                " consumed 15 hours of bbc content between " +
+                summary.getWeekStart() + " and " +
+                summary.getWeekEnd()
+            );
+        }
     }
 
     /**
