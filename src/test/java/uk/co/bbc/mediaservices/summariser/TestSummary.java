@@ -1,10 +1,12 @@
 package uk.co.bbc.mediaservices.summariser;
 
-import java.time.Month;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
+
 
 
 /**
@@ -14,25 +16,33 @@ public class TestSummary {
 
     @Test
     public void testBeanCreatedCorrectly() {
+        LocalDateTime dateTime = LocalDateTime.ofEpochSecond(
+            1550484440,
+            0,
+            ZoneOffset.UTC
+        );
         int userIdentifier = 1234567890;
-        Month monthOfYear = Month.OCTOBER;
         String category = "CATEGORY";
-        Summary smry = new Summary(userIdentifier, monthOfYear, category);
+        Summary smry = new Summary(userIdentifier, dateTime, category);
 
-        assertTrue(smry.getUserIdentifier() == userIdentifier);
-        assertEquals(smry.getMonthOfYear(), monthOfYear);
+        assertEquals(smry.getUserIdentifier(), userIdentifier);
+        assertEquals(smry.getMonth(), "January");
         assertEquals(smry.getCategory(), category);
     }
 
     @Test
     public void testToString() {
+        LocalDateTime dateTime = LocalDateTime.ofEpochSecond(
+            1550484440,
+            0,
+            ZoneOffset.UTC
+        );
         int userIdentifier = 1234567890;
-        Month monthOfYear = Month.OCTOBER;
         String category = "CATEGORY";
-        Summary smry = new Summary(userIdentifier, monthOfYear, category);
+        Summary smry = new Summary(userIdentifier, dateTime, category);
 
-        String s = "Summary: \nUser Identifier: " + userIdentifier +
-            "\nMonth of Year: October" +
+        String s = "Summary: \nUser Identifier: 1234567890" +
+            "\nMonth of Year: January" +
             "\nCategory: CATEGORY";
 
         assertEquals(smry.toString(), s);

@@ -11,9 +11,8 @@ import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.time.LocalDate;
-import java.time.Instant;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import javax.json.JsonArray;
 import javax.json.JsonReader;
 import javax.json.JsonString;
@@ -47,13 +46,15 @@ public class SummariserImpl implements Summariser {
      * @param Summary A summary bean used for rendering output
      */
     protected Summary viewingToSummary(Viewing viewing) {
-        LocalDate date = Instant.ofEpochMilli(
-                viewing.getDateInEpochSeconds()
-            ).atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDateTime dateTime = LocalDateTime.ofEpochSecond(
+            viewing.getDateInEpochSeconds(),
+            0,
+            ZoneOffset.UTC
+        );
 
         return new Summary(
             viewing.getUserIdentifier(),
-            date.getMonth(),
+            dateTime,
             categoryMapping(viewing.getProgrammeName()));
     }
 

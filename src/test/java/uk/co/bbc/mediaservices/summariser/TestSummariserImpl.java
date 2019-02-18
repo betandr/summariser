@@ -22,13 +22,21 @@ import static org.junit.Assert.assertEquals;
 public class TestSummariserImpl {
 
     @Test
+    public void testEpochToDate() {
+        SummariserImpl summariser = new SummariserImpl();
+        Viewing viewing = new Viewing(1540641600, 0, "-", 0, "-");
+        Summary s = summariser.viewingToSummary(viewing);
+        assertEquals(s.getMonth(), "October");
+    }
+
+    @Test
     public void testViewingToSummary() {
         SummariserImpl summariser = new SummariserImpl();
         Viewing viewing = new Viewing(1540641600, 98765432, "News", 3600, "mobile");
         Summary s = summariser.viewingToSummary(viewing);
 
         assertEquals(s.getUserIdentifier(), 98765432);
-        assertEquals(s.getUserIdentifier(), 98765432);
+        assertEquals(s.getMonth(), "October");
         // category is Unknown as we've not set any mappings
         assertEquals(s.getCategory(), "Unknown");
     }

@@ -1,8 +1,10 @@
 package uk.co.bbc.mediaservices.summariser;
 
-import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.Calendar;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents an idempotent single Summary.
@@ -11,12 +13,12 @@ import java.util.Locale;
  */
 public class Summary {
     private int userIdentifier;
-    private Month monthOfYear;
+    private LocalDateTime dateTime;
     private String category;
 
-    public Summary(int userIdentifier, Month monthOfYear, String category) {
+    public Summary(int userIdentifier, LocalDateTime dateTime, String category) {
         this.userIdentifier = userIdentifier;
-        this.monthOfYear = monthOfYear;
+        this.dateTime = dateTime;
         this.category = category;
     }
 
@@ -24,12 +26,16 @@ public class Summary {
         return this.userIdentifier;
     }
 
-    public Month getMonthOfYear() {
-        return this.monthOfYear;
+    public LocalDateTime getDateTime() {
+        return this.dateTime;
     }
 
-    public String getMonthString() {
-        return monthOfYear.getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+    public String getMonth() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(
+            "MMMM",
+            Locale.ENGLISH
+        );
+        return dateTime.format(formatter);
     }
 
     public String getCategory() {
@@ -38,7 +44,7 @@ public class Summary {
 
     public String toString() {
         return "Summary: \nUser Identifier: " + this.userIdentifier +
-            "\nMonth of Year: " + this.getMonthString() + 
+            "\nMonth of Year: " + this.getMonth() +
             "\nCategory: " + this.category;
     }
 }
