@@ -11,6 +11,9 @@ import java.util.Map;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.time.LocalDate;
+import java.time.Instant;
+import java.time.ZoneId;
 import javax.json.JsonArray;
 import javax.json.JsonReader;
 import javax.json.JsonString;
@@ -26,12 +29,41 @@ public class SummariserImpl implements Summariser {
     private Map<String,String> mappings;
 
     /**
+     * Safe lookup of category mappings
+     */
+    protected String categoryMapping(String programmeName) {
+        String category = "Unknown";
+
+        if (mappings != null && mappings.containsKey(programmeName)) {
+            category = mappings.get(programmeName);
+        }
+
+        return category;
+    }
+
+    /**
+     * Translates a viewing into an output Summary format.
+     * @param viewing The viewing bean to translate.
+     * @param Summary A summary bean used for rendering output
+     */
+    protected Summary viewingToSummary(Viewing viewing) {
+        LocalDate date = Instant.ofEpochMilli(
+                viewing.getDateInEpochSeconds()
+            ).atZone(ZoneId.systemDefault()).toLocalDate();
+
+        return new Summary(
+            viewing.getUserIdentifier(),
+            date.getMonth(),
+            categoryMapping(viewing.getProgrammeName()));
+    }
+
+    /**
      * Processes a single line of the viewings input.
      */
     protected void process(String line) {
         try {
-            Viewing viewing = stringToViewing(line);
-            System.out.println(viewing);
+            Viewing v = stringToViewing(line);
+            System.out.println(viewingToSummary(v));
         } catch (Exception e) {
             System.err.println(
                 "ERROR: could not process " + line +

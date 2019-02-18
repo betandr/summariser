@@ -13,7 +13,6 @@ import java.io.ByteArrayInputStream;
 // import static org.mockito.Matchers.any;
 
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 
@@ -23,19 +22,31 @@ import static org.junit.Assert.assertEquals;
 public class TestSummariserImpl {
 
     @Test
+    public void testViewingToSummary() {
+        SummariserImpl summariser = new SummariserImpl();
+        Viewing viewing = new Viewing(1540641600, 98765432, "News", 3600, "mobile");
+        Summary s = summariser.viewingToSummary(viewing);
+
+        assertEquals(s.getUserIdentifier(), 98765432);
+        assertEquals(s.getUserIdentifier(), 98765432);
+        // category is Unknown as we've not set any mappings
+        assertEquals(s.getCategory(), "Unknown");
+    }
+
+    @Test
     public void testStringToViewing() {
         SummariserImpl s = new SummariserImpl();
         Viewing v = null;
         try {
-             v = s.stringToViewing("1540641600, 98765432, News, 3600, mobile");
+             v = s.stringToViewing("1540641600,98765432,News,3600,mobile");
         } catch (Exception e) {
             // ignore
         }
 
-        assertTrue(v.getDateInEpochSeconds() == 1540641600);
-        assertTrue(v.getUserIdentifier() == 98765432);
+        assertEquals(v.getDateInEpochSeconds(), 1540641600);
+        assertEquals(v.getUserIdentifier(), 98765432);
         assertEquals(v.getProgrammeName(), "News");
-        assertTrue(v.getWatchTimeInSeconds() == 3600);
+        assertEquals(v.getWatchTimeInSeconds(), 3600);
         assertEquals(v.getDeviceType(), "mobile");
     }
 
