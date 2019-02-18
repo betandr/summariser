@@ -13,6 +13,7 @@ import java.io.ByteArrayInputStream;
 // import static org.mockito.Matchers.any;
 
 import org.junit.Test;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 
@@ -20,6 +21,24 @@ import static org.junit.Assert.assertEquals;
  * TestSummariserImpl tests the functionality of the Summariser class.
  */
 public class TestSummariserImpl {
+
+    @Test
+    public void testStringToViewing() {
+        SummariserImpl s = new SummariserImpl();
+        Viewing v = null;
+        try {
+             v = s.stringToViewing("1540641600, 98765432, News, 3600, mobile");
+        } catch (Exception e) {
+            // ignore
+        }
+
+        assertTrue(v.getDateInEpochSeconds() == 1540641600);
+        assertTrue(v.getUserIdentifier() == 98765432);
+        assertEquals(v.getProgrammeName(), "News");
+        assertTrue(v.getWatchTimeInSeconds() == 3600);
+        assertEquals(v.getDeviceType(), "mobile");
+    }
+
     @Test
     public void testScanTwoLines() {
         Scanner sc = new Scanner(

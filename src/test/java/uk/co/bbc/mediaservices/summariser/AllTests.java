@@ -7,6 +7,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({
     TestSummariserImpl.class,
-    TestCommandLineHandler.class
+    TestCommandLineHandler.class,
+    TestViewing.class
 })
 public class AllTests {}

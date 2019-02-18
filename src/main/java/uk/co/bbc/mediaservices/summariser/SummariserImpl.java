@@ -29,7 +29,37 @@ public class SummariserImpl implements Summariser {
      * Processes a single line of the viewings input.
      */
     protected void process(String line) {
-        System.out.println(line);
+        try {
+            Viewing viewing = stringToViewing(line);
+            System.out.println(viewing);
+        } catch (Exception e) {
+            System.err.println(
+                "ERROR: could not process " + line +
+                ": " + e.getMessage());
+        }
+    }
+
+    /**
+     * Extracts values from a single viewings comma-delimited string.
+     * @param line A comma-delimited string of the format `int,int,str,int,str`.
+     * @return Viewing an object containing safe versions of the line
+     */
+    protected Viewing stringToViewing(String line) throws Exception {
+        String[] lineData = line.split(",", -1);
+        Viewing viewing = null;
+
+        if (lineData.length == 5) {
+            viewing = new Viewing(
+                Integer.parseInt(lineData[0]),
+                Integer.parseInt(lineData[1]),
+                lineData[2],
+                Integer.parseInt(lineData[3]),
+                lineData[4]);
+        } else {
+            throw new Exception("not expected format");
+        }
+
+        return viewing;
     }
 
     /**
