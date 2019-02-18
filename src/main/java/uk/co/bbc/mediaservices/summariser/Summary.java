@@ -1,6 +1,7 @@
 package uk.co.bbc.mediaservices.summariser;
 
 import java.time.format.TextStyle;
+import java.time.temporal.WeekFields;
 import java.util.Locale;
 import java.util.Calendar;
 import java.time.LocalDateTime;
@@ -42,6 +43,11 @@ public class Summary {
             Locale.ENGLISH
         );
         return dateTime.format(formatter);
+    }
+
+    public int getWeekNumber() {
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        return this.dateTime.get(weekFields.weekOfWeekBasedYear());
     }
 
     public String getCategory() {

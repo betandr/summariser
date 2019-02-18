@@ -15,6 +15,41 @@ import static org.junit.Assert.assertEquals;
 public class TestSummary {
 
     @Test
+    public void testSummaryReturnsCorrectWeekNumber() {
+        LocalDateTime startOfYearDateTime = LocalDateTime.ofEpochSecond(
+            1546300800,
+            0,
+            ZoneOffset.UTC
+        );
+
+        LocalDateTime duringYearDateTime = LocalDateTime.ofEpochSecond(
+            1550488036,
+            0,
+            ZoneOffset.UTC
+        );
+
+        LocalDateTime endOfYearDateTime = LocalDateTime.ofEpochSecond(
+            1577836799,
+            0,
+            ZoneOffset.UTC
+        );
+
+        Summary startOfYearSummary = new Summary(-1, startOfYearDateTime, null, -1);
+        Summary duringYearSummary = new Summary(-1, duringYearDateTime, null, -1);
+        Summary endOfYearSummary = new Summary(-1, endOfYearDateTime, null, -1);
+
+        assertEquals("January", startOfYearSummary.getMonth());
+        assertEquals(1, startOfYearSummary.getWeekNumber());
+
+        assertEquals("December", endOfYearSummary.getMonth());
+        // week is still 1 as it's the end of the year
+        assertEquals(1, endOfYearSummary.getWeekNumber());
+
+        assertEquals("February", duringYearSummary.getMonth());
+        assertEquals(8, duringYearSummary.getWeekNumber());
+    }
+
+    @Test
     public void testBeanCreatedCorrectly() {
         LocalDateTime dateTime = LocalDateTime.ofEpochSecond(
             1550484440,
@@ -27,7 +62,7 @@ public class TestSummary {
         Summary smry = new Summary(userIdentifier, dateTime, category, watchTimeInSeconds);
 
         assertEquals(smry.getUserIdentifier(), userIdentifier);
-        assertEquals(smry.getMonth(), "January");
+        assertEquals(smry.getMonth(), "February");
         assertEquals(smry.getCategory(), category);
         assertEquals(smry.getWatchTimeInSeconds(), watchTimeInSeconds);
     }
@@ -45,7 +80,7 @@ public class TestSummary {
         Summary smry = new Summary(userIdentifier, dateTime, category, watchTimeInSeconds);
 
         String s = "[Summary\nUser Identifier: 1234567890" +
-            "\nMonth of Year: January" +
+            "\nMonth of Year: February" +
             "\nCategory: CATEGORY" +
             "\nWatch Time (secs): 1234]";
 

@@ -8,6 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
     TestSummariserImpl.class,
     TestCommandLineHandler.class,
-    TestViewing.class
+    TestViewing.class,
+    TestSummary.class
 })
 public class AllTests {}
