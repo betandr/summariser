@@ -9,6 +9,7 @@ import org.junit.runners.Suite.SuiteClasses;
     TestSummariserImpl.class,
     TestCommandLineHandler.class,
     TestViewing.class,
-    TestSummary.class
+    TestSummary.class,
+    TestMutableInt.class
 })
 public class AllTests {}

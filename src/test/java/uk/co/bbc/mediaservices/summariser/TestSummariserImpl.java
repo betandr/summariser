@@ -2,6 +2,7 @@ package uk.co.bbc.mediaservices.summariser;
 
 import java.util.Scanner;
 import java.util.Map;
+import java.util.HashMap;
 import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
@@ -14,12 +15,21 @@ import java.io.ByteArrayInputStream;
 
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 
 /**
  * TestSummariserImpl tests the functionality of the Summariser class.
  */
 public class TestSummariserImpl {
+
+    @Test
+    public void testSummaryDurationsReturnsAMap() {
+        SummariserImpl summariser = new SummariserImpl();
+        Object durations = summariser.summaryDurations();
+        assertTrue(durations != null);
+        assertTrue(durations instanceof Map);
+    }
 
     @Test
     public void testEpochToDate() {

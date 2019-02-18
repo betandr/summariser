@@ -28,6 +28,11 @@ public class SummariserImpl implements Summariser {
     private Map<String,String> mappings;
 
     /**
+     * Holds the overall durations for user/weeknumber/category
+     */
+    private Map<String, MutableInt> durations;
+
+    /**
      * Safe lookup of category mappings
      */
     protected String categoryMapping(String programmeName) {
@@ -38,6 +43,17 @@ public class SummariserImpl implements Summariser {
         }
 
         return category;
+    }
+
+    /**
+     * Safety method to obtain the durations map
+     */
+    protected Map<String, MutableInt> summaryDurations() {
+        if (durations == null) {
+            durations = new HashMap<String, MutableInt>();
+        }
+
+        return durations;
     }
 
     /**
@@ -60,16 +76,38 @@ public class SummariserImpl implements Summariser {
     }
 
     /**
+     * Add the duration from the supplied viewing to the previously encountered
+     * durations.
+     */
+    protected void addSummary(Map<String, MutableInt> durations, Summary summary) {
+        String key =
+            summary.getUserIdentifier() + "_" +
+            summary.getWeekNumber() + "_" +
+            summary.getCategory();
+
+        MutableInt duration = durations.get(key);
+
+        if (duration == null) {
+            durations.put(key, new MutableInt());
+        } else {
+            duration.add(summary.getWatchTimeInSeconds());
+        }
+
+        System.out.println(key + " - " + summary.getWatchTimeInSeconds());
+    }
+
+    /**
      * Processes a single line of the viewings input.
      */
     protected void process(String line) {
         try {
             Viewing v = stringToViewing(line);
-            System.out.println(viewingToSummary(v));
+            addSummary(summaryDurations(), viewingToSummary(v));
         } catch (Exception e) {
             System.err.println(
-                "ERROR: could not process " + line +
-                ": " + e.getMessage());
+                "ERROR: could not process " +
+                line + ": " +
+                e.getMessage());
         }
     }
 
