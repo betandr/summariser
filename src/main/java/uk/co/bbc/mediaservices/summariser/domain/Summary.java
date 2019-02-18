@@ -1,4 +1,4 @@
-package uk.co.bbc.mediaservices.summariser;
+package uk.co.bbc.mediaservices.summariser.domain;
 
 import java.time.format.TextStyle;
 import java.time.temporal.WeekFields;

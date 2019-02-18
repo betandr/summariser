@@ -19,6 +19,10 @@ import javax.json.JsonString;
 import javax.json.Json;
 import javax.json.JsonObject;
 
+import uk.co.bbc.mediaservices.summariser.domain.Duration;
+import uk.co.bbc.mediaservices.summariser.domain.Viewing;
+import uk.co.bbc.mediaservices.summariser.domain.Summary;
+
 /**
  * SummariserImpl is an implementation of the Summariser interface which runs
  * a summarise task, given a job.

@@ -1,4 +1,4 @@
-package uk.co.bbc.mediaservices.summariser;
+package uk.co.bbc.mediaservices.summariser.domain;
 
 /**
  * Represents an idempotent single audience viewing.

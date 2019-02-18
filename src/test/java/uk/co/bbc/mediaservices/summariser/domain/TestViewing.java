@@ -1,4 +1,4 @@
-package uk.co.bbc.mediaservices.summariser;
+package uk.co.bbc.mediaservices.summariser.domain;
 
 import org.junit.Test;
 import static org.junit.Assert.assertTrue;

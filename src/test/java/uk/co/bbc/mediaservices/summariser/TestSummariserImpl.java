@@ -20,6 +20,10 @@ import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import uk.co.bbc.mediaservices.summariser.domain.Duration;
+import uk.co.bbc.mediaservices.summariser.domain.Viewing;
+import uk.co.bbc.mediaservices.summariser.domain.Summary;
+
 
 /**
  * TestSummariserImpl tests the functionality of the Summariser class.
