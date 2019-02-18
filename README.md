@@ -46,7 +46,39 @@ supplied as a file of comma-separated values of the format:
 ```
 
 `Summariser` will then generate a JSON output file containing a summary of the
-viewing data organised by identifier, month of the year, and category.
+viewing data organised by identifier, month of the year, and category, of the
+format:
+
+```
+{
+	"identifier": 123456789,
+	"summary": [{
+			"month": "September",
+			"categories": [{
+					"category": "drama",
+					"duration": 12
+				},
+				{
+					"category": "comedy",
+					"duration": 13
+				}
+			]
+		},
+		{
+			"month": "October",
+			"categories": [{
+					"category": "drama",
+					"duration": 14
+				},
+				{
+					"category": "comedy",
+					"duration": 15
+				}
+			]
+		}
+	]
+}
+```
 
 A message will be printed to `stderr` any time a customer has spent more than
 15 hours watching BBC content in a rolling 7 day period. e.g.
