@@ -5,7 +5,15 @@ package uk.co.bbc.mediaservices.summariser;
  * Represents a mutable int type which can be used to efficiently sum using a map.
  */
 public class MutableInt {
-    private int value = 0;
+    private int value;
+
+    public MutableInt() {
+        this.value = 0;
+    }
+
+    public MutableInt(int value) {
+        this.value = value;
+    }
 
     /**
      * Adds a value to the MutableInt. If get() yields 2, calling add(2) will

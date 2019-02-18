@@ -8,7 +8,6 @@ import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.assertEquals;
 
 
-
 /**
  * TestSummary tests the functionality of the Summary bean.
  */

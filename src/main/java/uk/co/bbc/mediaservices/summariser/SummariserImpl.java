@@ -95,7 +95,7 @@ public class SummariserImpl implements Summariser {
             duration.add(summary.getWatchTimeInSeconds());
         }
 
-        // TODO refactor to not use category key and Duration instead of MutableInt
+        // TODO refactor to use new Duration object
 
         if (durations.get(key).get() > FIFTEEN_HOURS) {
             System.out.println(

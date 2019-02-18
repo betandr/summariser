@@ -10,6 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
     TestCommandLineHandler.class,
     TestViewing.class,
     TestSummary.class,
-    TestMutableInt.class
+    TestMutableInt.class,
+    TestDuration.class
 })
 public class AllTests {}
